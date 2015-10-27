@@ -215,7 +215,7 @@ if($options{a}){$stack_height_min=$options{a};}
 my $dir;
 my $dir_tmp;
 
-if(defined $options{'z'}){$time.=$options{'z'}};
+if(defined $options{'z'}){$time=$options{'z'}};
 
 ################################################## MAIN ############################################################
 
@@ -340,7 +340,7 @@ Genome file $file_genome is not a fasta file\n\n";
     close IN;
 
     open IN,"<$file_reads_vs_genome";
-    if(<IN> !~ /^(\S+_x\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\S+)\s+(\S+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\S+)\s+([+-])\s+(\d+)\s*([mDIM]*)$/){
+    if($file_reads_vs_genome=~/arf$/ && <IN> !~ /^(\S+_x\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\S+)\s+(\S+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\S+)\s+([+-])\s+(\d+)\s*([mDIM]*)$/){
         printErr();
         die "Mapping file $file_reads_vs_genome is not in arf format\n
 Each line of the mapping file must consist of the following fields
@@ -353,10 +353,10 @@ The genomeID is not allowed to contain whitespaces.
     close IN;
 
 	## get ids from arf file and compare them with ids from the genome file
-	$tmps = `cut -f6 $file_reads_vs_genome|sort -u`;
-	foreach my $s(split("\n",$tmps)){
-		if(not $genomeids{">$s"}){ die "The mapped reference id $s from file $file_reads_vs_genome is not an id of the genome file $file_genome\n\n";}
-	}
+    #$tmps = `cut -f6 $file_reads_vs_genome|sort -u`;
+    #foreach my $s(split("\n",$tmps)){
+    #	if(not $genomeids{">$s"}){ die "The mapped reference id $s from file $file_reads_vs_genome is not an id of the genome file $file_genome\n\n";}
+    #}
 
 
     if($file_mature_ref_this_species !~ /none/){
@@ -368,10 +368,7 @@ The genomeID is not allowed to contain whitespaces.
             die "The first line of file  $file_mature_ref_this_species does not start with '>identifier'
 miRNA reference this species file $file_mature_ref_this_species is not a fasta file\n\n";
         }
-		if($line =~ /\s/){
-			printErr();
-			die "miRNA reference this species file $file_mature_ref_this_species has not allowed whitespaces in its first identifier\n\n";
-		}
+		
 		$line=<IN>;
         if($line !~ /^[ACGTUNacgtun]*$/){
 			printErr();
@@ -392,10 +389,7 @@ miRNA reference this species file $file_mature_ref_this_species is not a fasta f
             die "The first line of file  $file_mature_ref_other_species does not start with '>identifier'
 miRNA reference other species file $file_mature_ref_other_species is not a fasta file\n\n";
         }
-		if($line =~ /\s/){
-			printErr();
-			die "miRNA reference other species file $file_mature_ref_other_species has not allowed whitespaces in its first identifier\n\n";
-		}
+		
         if(<IN> !~ /^[ACGTUNacgtun]*$/){
             printErr();
             die "File $file_mature_ref_other_species contains not allowed characters in sequences
@@ -414,10 +408,7 @@ miRNA reference other species file $file_mature_ref_other_species is not a fasta
             die "The first line of file $file_precursors does not start with '>identifier'
 precursor file $file_precursors is not a fasta file\n\n";
         }
-		if($line =~ /\s/){
-			printErr();
-			die "precursor file $file_precursors has not allowed whitespaces in its first identifier\n\n";
-		}
+		
 		$line=<IN>;
         if($line !~ /^[ACGTUNacgtun]*$/){
             printErr();
