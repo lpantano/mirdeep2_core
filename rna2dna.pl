@@ -23,7 +23,7 @@ exit;
 sub parse_fasta{
 
     my ($file) = @_;
-
+    my is_q = 0;
     open (FASTA, "<$file") or die "can not open $file\n";
     while (<FASTA>){
       
@@ -31,10 +31,19 @@ sub parse_fasta{
 	
 	    print "$1\n";
 
-	}else{
+    }elsif(/^@(\S+)/){
+
+        print ">$1\n";
+        $is_q = 1;
+
+    }elsif(/^[AUTGCN]+$/){
 		
 	    s/U/T/g;
 	    print uc($_);
+        if ($is_q == 1){
+            <FASTA>;
+            <FASTA>;
+        }
 	}
     }
     

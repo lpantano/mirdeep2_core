@@ -434,76 +434,7 @@ If you have precursors with less than $minpreslen please use option -p <int> to 
 
 
     #do stringent testing of all input files
-
-    print "#testing input files\n";
-    print STDERR "#testing input files\n";
-
-    if($file_mature_ref_this_species !~ /none/){
-        start();
-        print STDERR "sanity_check_mature_ref.pl $file_mature_ref_this_species\n\n";
-        my $ret_file_mature_ref_this_species=`sanity_check_mature_ref.pl $file_mature_ref_this_species 2>&1`;
-
-        if($ret_file_mature_ref_this_species){
-            printErr();
-            die "problem with $file_mature_ref_this_species\n".$ret_file_mature_ref_this_species;
-        }
-        end();
-    }
-
-    if($file_mature_ref_other_species !~ /none/){
-        start();
-
-        print STDERR "sanity_check_mature_ref.pl $file_mature_ref_other_species\n\n";
-        my $ret_file_mature_ref_other_species=`sanity_check_mature_ref.pl $file_mature_ref_other_species 2>&1`;
-
-        if($ret_file_mature_ref_other_species){
-            printErr();
-            die "problem with $file_mature_ref_other_species\n".$ret_file_mature_ref_other_species;
-        }
-        end();
-    }
-
-
-    print STDERR "sanity_check_reads_ready_file.pl $file_reads\n\n";
-    start();
-    my $ret_test_file_reads=`sanity_check_reads_ready_file.pl $file_reads 2>&1`;
-
-    if($ret_test_file_reads){
-        printErr();
-        die "problem with $file_reads\n".$ret_test_file_reads;
-    }
-    end();
-    start();
-    print STDERR "sanity_check_genome.pl $file_genome\n\n";
-    my $ret_test_file_genome=`sanity_check_genome.pl $file_genome 2>&1`;
-
-    if($ret_test_file_genome){
-        printErr();
-        die "problem with $file_genome\n".$ret_test_file_genome;
-    }
-    end();
-    start();
-
-    print STDERR "sanity_check_mapping_file.pl $file_reads_vs_genome\n\n";
-    my $ret_test_file_reads_genome=`sanity_check_mapping_file.pl $file_reads_vs_genome 2>&1`;
-
-    if($ret_test_file_reads_genome){
-        printErr();
-        die "problem with $file_reads_vs_genome\n". $ret_test_file_reads_genome;
-    }
-    end();
-
     if($file_precursors !~ /none/){
-        start();
-
-        print STDERR "sanity_check_mature_ref.pl $file_precursors\n\n";
-        my $ret_file_precursors=`sanity_check_mature_ref.pl $file_precursors 2>&1`;
-
-        if($ret_file_precursors){
-            printErr();
-            die "problem with $file_precursors\n".$ret_file_precursors;
-        }
-        end();
 
         start();
         if($file_mature_ref_this_species !~ /none/i){
@@ -608,6 +539,14 @@ sub rna2dna{
         end();
     }
 
+        ##copy file
+        my ( $file_reads_tmp, $path0, $extension0 ) = fileparse (  $file_reads, '\..*' );
+        print STDERR "$scripts/rna2dna.pl $file_reads > $dir_tmp/$file_reads_tmp$extension0\n\n";
+        ##here give file name
+        my $ret_parse_reads=`$scripts/rna2dna.pl $file_reads > $dir_tmp/$file_reads_tmp$extension0`;
+        ##rename orig file
+        $file_reads =  $file_reads_tmp.$extension0;
+        end();
     return 0;
 }
 
