@@ -23,7 +23,7 @@ exit;
 sub parse_fasta{
 
     my ($file) = @_;
-    my is_q = 0;
+    my $is_q = 0;
     open (FASTA, "<$file") or die "can not open $file\n";
     while (<FASTA>){
       
