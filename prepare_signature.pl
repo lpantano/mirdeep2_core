@@ -36,7 +36,7 @@ getopts("a:bo:",\%options);
 
 #global variables
 my $ltime=time();
-my $dir="dir_prepare_signature$ltime";
+my $dir="dir_prepare_signature";
 my $outfile=$options{'o'} or die "no outfile specified with options{'o'}\n";
 #MAIN
 
