@@ -59,6 +59,7 @@ output.mrd    text output of the reported hairpins.
 
 Options:
 
+-f file       File with Rfam sequences to remove rRNA from reads.
 -a int        minimum read stack height that triggers analysis. Using this option disables
               automatic estimation of the optimal value and all detected precursors are analyzed
 
@@ -197,12 +198,13 @@ Either specify a valid fasta file or say none\n\n$warning";}
 
 my %options=();
 
-getopts("a:b:cdt:uvq:s:z:r:p:g:EP",\%options);
+getopts("f:a:b:cdt:uvq:s:z:r:p:g:EP",\%options);
 
 my $max_pres=50000;
 $max_pres=$options{'g'} if(defined $options{'g'});
 
 ## minimal precursor length, used for precheck of precursor file
+my $Rfam_for_miRDeep = $options{'f'};
 my $minpreslen=40;
 if($options{'p'}){
 	$minpreslen=$options{'p'}
@@ -816,15 +818,15 @@ sub output_results{
     if($file_mature_ref_this_species !~ /none/i){
 
         if($options{'q'}){
-            $line="$scripts/make_html.pl -f $dir/output.mrd -k $dir_tmp/$file_mature_ref_this_species -p $dir_tmp/precursors.coords -s $dir/survey.csv -c -e -q $options{'q'} -x $xopt -r ${scripts}/Rfam_for_miRDeep.fa -v $sc -y $time $sort_by_sample $OE";
+            $line="$scripts/make_html.pl -f $dir/output.mrd -k $dir_tmp/$file_mature_ref_this_species -p $dir_tmp/precursors.coords -s $dir/survey.csv -c -e -q $options{'q'} -x $xopt -r $Rfam_for_miRDeep -v $sc -y $time $sort_by_sample $OE";
         }else{
-            $line="$scripts/make_html.pl -f $dir/output.mrd -k $dir_tmp/$file_mature_ref_this_species -p $dir_tmp/precursors.coords -s $dir/survey.csv -c -e -r ${scripts}Rfam_for_miRDeep.fa -v $sc -y $time  $sort_by_sample $OE";
+            $line="$scripts/make_html.pl -f $dir/output.mrd -k $dir_tmp/$file_mature_ref_this_species -p $dir_tmp/precursors.coords -s $dir/survey.csv -c -e -r $Rfam_for_miRDeep -v $sc -y $time  $sort_by_sample $OE";
         }
     }else{
         if($options{'q'}){
-            $line="$scripts/make_html.pl -f $dir/output.mrd -p $dir_tmp/precursors.coords -s $dir/survey.csv -c -e -q $options{'q'}  -x $xopt -r ${scripts}Rfam_for_miRDeep.fa -v $sc -y $time $sort_by_sample $OE";
+            $line="$scripts/make_html.pl -f $dir/output.mrd -p $dir_tmp/precursors.coords -s $dir/survey.csv -c -e -q $options{'q'}  -x $xopt -r $Rfam_for_miRDeep -v $sc -y $time $sort_by_sample $OE";
         }else{
-            $line="$scripts/make_html.pl -f $dir/output.mrd -p $dir_tmp/precursors.coords -v $sc -s $dir/survey.csv -c -e -r ${scripts}/Rfam_for_miRDeep.fa -y $time $sort_by_sample $OE";
+            $line="$scripts/make_html.pl -f $dir/output.mrd -p $dir_tmp/precursors.coords -v $sc -s $dir/survey.csv -c -e -r $Rfam_for_miRDeep -y $time $sort_by_sample $OE";
         }
     }
 
@@ -952,7 +954,7 @@ If this did not help please restart youer workstation.\n\n";
 	$ret = checkBIN("perl -e \'use PDF::API2; print \"installed\";\'","installed");
 	die "Error: \tPerl PDF::API2 package not found\nCheck if the perl PDF::API2 package is correctly installed and all Pathes were set correctly.\n$stdm" if($ret);
 
-	if(not -f "$scripts/Rfam_for_miRDeep.fa"){
+	if(not -f "$Rfam_for_miRDeep"){
 		die "Error:\t Rfam_for_miRDeep.fa not found in your miRDeep2 scripts directory\nPlease copy this file from the miRDeep2 archive to your miRDeep2 scripts directory\n\n";
 	}
 
