@@ -126,7 +126,6 @@ my $ctime=time();
 
 my $time=myTime();
 
-# my $scripts=`which miRDeep2.pl`;
 my $scripts=abs_path($0);
 $scripts =~ s/miRDeep2.pl//;
 $scripts =~ s/\s+//g;
@@ -642,9 +641,9 @@ sub fold_precursors{
 
     print "#folding precursors\n";
     print STDERR "#folding precursors\n";
-    print STDERR "RNAfold < $dir_tmp/precursors.fa -noPS > $dir_tmp/precursors.str\n\n";
+    print STDERR "RNAfold < $dir_tmp/precursors.fa --noPS > $dir_tmp/precursors.str\n\n";
     start();
-	my $ret_fold_precursors=system("RNAfold < $dir_tmp/precursors.fa -noPS > $dir_tmp/precursors.str 2>>error_${time}.log");
+	my $ret_fold_precursors=system("RNAfold < $dir_tmp/precursors.fa --noPS > $dir_tmp/precursors.str 2>>error_${time}.log");
 	if($ret_fold_precursors){
 		$ret_fold_precursors=system("RNAfold < $dir_tmp/precursors.fa --noPS > $dir_tmp/precursors.str");
 		if($ret_fold_precursors){
@@ -754,7 +753,7 @@ sub perform_controls{
     print STDERR "echo '$line > $dir/output.mrd' > $dir_tmp/command_line\n\n";
     my $ret_command_line=`echo '$line > $dir/output.mrd' > $dir_tmp/command_line`;
     print STDERR "$scripts/perform_controls.pl $dir_tmp/command_line $dir_tmp/precursors.str 100 -a > $dir_tmp/output_permuted.mrd 2>>error_${time}.log\n\n";
-    my $ret_perform_controls=`perform_controls.pl $dir_tmp/command_line $dir_tmp/precursors.str 100 -a > $dir_tmp/output_permuted.mrd 2>>error_${time}.log`;
+    my $ret_perform_controls=`$scripts/perform_controls.pl $dir_tmp/command_line $dir_tmp/precursors.str 100 -a > $dir_tmp/output_permuted.mrd 2>>error_${time}.log`;
     end();
     return;
 }
@@ -818,15 +817,15 @@ sub output_results{
     if($file_mature_ref_this_species !~ /none/i){
 
         if($options{'q'}){
-            $line="$scripts/make_html.pl -f $dir/output.mrd -k $dir_tmp/$file_mature_ref_this_species -p $dir_tmp/precursors.coords -s $dir/survey.csv -c -e -q $options{'q'} -x $xopt -r $Rfam_for_miRDeep -v $sc -y $time $sort_by_sample $OE";
+            $line="perl $scripts/make_html.pl -f $dir/output.mrd -k $dir_tmp/$file_mature_ref_this_species -p $dir_tmp/precursors.coords -s $dir/survey.csv -c -e -q $options{'q'} -x $xopt -r $Rfam_for_miRDeep -v $sc -y $time $sort_by_sample $OE";
         }else{
-            $line="$scripts/make_html.pl -f $dir/output.mrd -k $dir_tmp/$file_mature_ref_this_species -p $dir_tmp/precursors.coords -s $dir/survey.csv -c -e -r $Rfam_for_miRDeep -v $sc -y $time  $sort_by_sample $OE";
+            $line="perl $scripts/make_html.pl -f $dir/output.mrd -k $dir_tmp/$file_mature_ref_this_species -p $dir_tmp/precursors.coords -s $dir/survey.csv -c -e -r $Rfam_for_miRDeep -v $sc -y $time  $sort_by_sample $OE";
         }
     }else{
         if($options{'q'}){
-            $line="$scripts/make_html.pl -f $dir/output.mrd -p $dir_tmp/precursors.coords -s $dir/survey.csv -c -e -q $options{'q'}  -x $xopt -r $Rfam_for_miRDeep -v $sc -y $time $sort_by_sample $OE";
+            $line="perl $scripts/make_html.pl -f $dir/output.mrd -p $dir_tmp/precursors.coords -s $dir/survey.csv -c -e -q $options{'q'}  -x $xopt -r $Rfam_for_miRDeep -v $sc -y $time $sort_by_sample $OE";
         }else{
-            $line="$scripts/make_html.pl -f $dir/output.mrd -p $dir_tmp/precursors.coords -v $sc -s $dir/survey.csv -c -e -r $Rfam_for_miRDeep -y $time $sort_by_sample $OE";
+            $line="perl $scripts/make_html.pl -f $dir/output.mrd -p $dir_tmp/precursors.coords -v $sc -s $dir/survey.csv -c -e -r $Rfam_for_miRDeep -y $time $sort_by_sample $OE";
         }
     }
 
