@@ -334,7 +334,7 @@ my $starf='';
 if($options{'s'}){$starf ="-j $outdir/${name3}_mapped.arf";}
 
 if($organisms{$species} ){
-   $command = "make_html2.pl -q $outdir/miRBase.mrd -k $name1 -t $organisms{$species} -y $time $opt_d $opt_o -i $outdir/${name1}_mapped.arf $starf $opt_l $opt_m -M miRNAs_expressed_all_samples_$time.csv $opt_P $opt_W";
+   $command = "$scripts/make_html2.pl -q $outdir/miRBase.mrd -k $name1 -t $organisms{$species} -y $time $opt_d $opt_o -i $outdir/${name1}_mapped.arf $starf $opt_l $opt_m -M miRNAs_expressed_all_samples_$time.csv $opt_P $opt_W";
 
 
 
@@ -345,7 +345,7 @@ if($organisms{$species} ){
 }elsif($rorganisms{$species}){
 
 
-     $command="make_html2.pl -q $outdir/miRBase.mrd -k $name1 -t $species -y $time $opt_d $opt_o -i $outdir/${name1}_mapped.arf $starf $opt_l $opt_m -M miRNAs_expressed_all_samples_$time.csv $opt_P $opt_W";
+     $command="$scripts/make_html2.pl -q $outdir/miRBase.mrd -k $name1 -t $species -y $time $opt_d $opt_o -i $outdir/${name1}_mapped.arf $starf $opt_l $opt_m -M miRNAs_expressed_all_samples_$time.csv $opt_P $opt_W";
 
 
     print STDERR "$command\n";
@@ -355,7 +355,7 @@ if($organisms{$species} ){
 
 
 }else{
-    $command = "make_html2.pl -q $outdir/miRBase.mrd -k $name1 -y $time $opt_d $opt_o -i $outdir/${name1}_mapped.arf $starf $opt_l $opt_m -M miRNAs_expressed_all_samples_$time.csv $opt_P $opt_W";
+    $command = "$scripts/make_html2.pl -q $outdir/miRBase.mrd -k $name1 -y $time $opt_d $opt_o -i $outdir/${name1}_mapped.arf $starf $opt_l $opt_m -M miRNAs_expressed_all_samples_$time.csv $opt_P $opt_W";
 
 
  print STDERR "$command\n";
