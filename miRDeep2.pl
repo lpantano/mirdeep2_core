@@ -321,10 +321,10 @@ Reads file $file_reads is not a fasta file\n\n";
         die "The first line of file $file_genome does not start with '>identifier'
 Genome file $file_genome is not a fasta file\n\n";
     }
-	if($line =~ /\s/){
-		printErr();
-        die "Genome file $file_genome has not allowed whitespaces in its first identifier\n\n";
-	}
+    #if($line =~ /\s/){
+        #printErr();
+        #die "Genome file $file_genome has not allowed whitespaces in its first identifier\n\n";
+    #}
 
 	## get genome ids
 	my $tmps=`grep ">" $file_genome`;
